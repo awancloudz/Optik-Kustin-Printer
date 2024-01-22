@@ -47,6 +47,7 @@ class PrintController extends Controller
         //Design
         $printer->setJustification(Printer::JUSTIFY_CENTER);
         $printer->setBarcodeHeight(70);
+        $printer->setBarcodeWidth(4);
         $printer->barcode($NoNota, Printer::BARCODE_CODE93);
         $printer->setJustification();
         $printer->feed();
@@ -71,6 +72,10 @@ class PrintController extends Controller
         $printer->text(_tl('Alamat', 15) . ": " . $request->Data['ALAMAT']);
         $printer->feed();
         $printer->text(_tl('Telp ', 15) . ": " . $request->Data['NO. TELP']);
+        $printer->feed();
+        $printer->text(_tl('Umur ', 15) . ": " . $request->Data['Umur']);
+        $printer->feed();
+        $printer->text(_tl('Jenis Kelamin ', 15) . ": " . $request->Data['JENIS KELAMIN']);
         $printer->feed();
         $printer->text(_tl('', self::WIDTH, '='));
         $printer->feed();
@@ -116,18 +121,50 @@ class PrintController extends Controller
         $printer->text(_tl('', self::WIDTH, '-'));
         $printer->feed();
 
-        $printer->text(_tl('Visus Balance', 17) . ': ' . _tl($request->Data['VISUS BALANCING'], 29));
+        $printer->text(_tl('Jenis Frame', 15) . ': ' . _tl($request->Data['JENIS FRAME'], 5) . _tl('Wrap Angle', 15) . ': ' . _tl($request->Data['WRAP ANGLE'], 5));
         $printer->feed();
-
-        $printer->text(_tl('Duke Elder', 17) . ': ' . _tl($request->Data['DUKE ELDER'], 29));
+        $printer->text(_tl('Koridor', 15) . ': ' . _tl($request->Data['CORRIDOR'], 5) . _tl('Pantoskopik', 15) . ': ' . _tl($request->Data['PANTOSCOPIK'], 5));
         $printer->feed();
-
-        $printer->text(_tl('Catatan Resep', 17) . ': ' . _tl($request->Data['CATATAN RESEP'], 29));
+        $printer->text(_tl('Visus Balance', 15) . ': ' . _tl($request->Data['VISUS BALANCING'], 5) . _tl('Vertex Distance', 15) . ': ' . _tl($request->Data['VERTEX DISTANCE'], 5));
+        $printer->feed();
+        $printer->text(_tl('Duke Elder', 15) . ': ' . _tl($request->Data['DUKE ELDER'], 5) . _tl('Catatan Resep', 15) . ': ' . _tl($request->Data['CATATAN RESEP'], 5));
         $printer->feed();
         
         $printer->text(_tl('', self::WIDTH, '-'));
         $printer->feed();
+        $printer->feed();
         
+        $printer->setDoubleStrike(true);
+        $printer->text(_tl('PRECAL:', self::WIDTH));
+        $printer->setDoubleStrike(false);
+
+        $printer->text(_tl('', self::WIDTH, '='));
+        $printer->feed();
+        $printer->setDoubleStrike(true);
+        $printer->text(
+            _tc('A', 9) .
+            _tc('B', 9) .
+            _tc('DBL', 9) .
+            _tc('MPD', 9) .
+            _tc('SH/PV', 9)
+        );
+        $printer->setDoubleStrike(false);
+        $printer->feed();
+        $printer->text(_tl('', self::WIDTH, '='));
+        $printer->feed();
+
+        $printer->setDoubleStrike(true);
+        $printer->text(
+            _tc($request->Data['A'], 9) .
+            _tc($request->Data['B'], 9) .
+            _tc($request->Data['DBL'], 9) .
+            _tc($request->Data['MPD'], 9) .
+            _tc($request->Data['SH/PV'], 9)
+        );
+        $printer->setDoubleStrike(false);
+        $printer->feed();
+        $printer->feed();
+
         $printer->text( _tl('Frame', 10) . ': ' . _tl($request->Data['FRAME'], 36));
         $printer->feed();
         $printer->text( _tl('Lensa', 10) . ': ' . _tl($request->Data['LENSA'], 36));
@@ -141,7 +178,14 @@ class PrintController extends Controller
         $printer->feed();
         $printer->text(_tl('', self::WIDTH, '-'));
         $printer->feed();
+        $printer->feed();
 
+        $printer->setDoubleStrike(true);
+        $printer->text(_tc($request->Data['STORE'], self::WIDTH));
+        $printer->setDoubleStrike(false);
+        $printer->feed();
+        $printer->feed();
+    
         $printer->text(_tc('Edger', 24) . _tc('Quality Control', 24));
         $printer->feed();
         $printer->feed();
