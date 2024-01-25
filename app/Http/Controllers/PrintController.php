@@ -28,8 +28,8 @@ class PrintController extends Controller
     public function printSuratOrder(Request $request){
         //Variable
         $NoNota = $request->Data['NOTA'];
-        $Cabang = $request->Data['STORE'];
-        $RX = $request->Data['RX'];
+        $Cabang = $request->DataPesanan['Cabang'];
+        $RX = $request->DataPesanan['RX'];
 
         if($Cabang == 'TEMBALANG'){
             $toko_nama = "OPTIK KUSTIN";
@@ -40,13 +40,13 @@ class PrintController extends Controller
         }        
 
         //Printer Initialization
-        $printerName = env('PRINTER_NAME');
+        $printerName = "POS-80";
         $connector = new WindowsPrintConnector($printerName);
         $printer = new Printer($connector);
 
         //Design
         $printer->setJustification(Printer::JUSTIFY_CENTER);
-        $printer->setBarcodeHeight(70);
+        $printer->setBarcodeHeight(90);
         $printer->setBarcodeWidth(4);
         $printer->barcode($NoNota, Printer::BARCODE_CODE93);
         $printer->setJustification();
@@ -61,21 +61,21 @@ class PrintController extends Controller
         $printer->feed();
         $printer->text(_tl('Rx. ', 15) . ": " . $RX);
         $printer->feed();
-        $printer->text(_tl('Tanggal', 15) . ": " . $request->Data['TGL PESAN']);
+        $printer->text(_tl('Tanggal', 15) . ": " . $request->DataPesanan['TanggalPesan']);
         $printer->feed();
-        $printer->text(_tl('Tgl. Selesai', 15) . ": " .  $request->Data['TGL SELESAI']);
+        $printer->text(_tl('Tgl. Selesai', 15) . ": " .  $request->DataPesanan['TanggalSelesai']);
         $printer->feed();
         $printer->text(_tl('', self::WIDTH, '-'));
         $printer->feed();
-        $printer->text(_tl('Nama', 15) . ": " . $request->Data['NAMA CUSTOMER']);
+        $printer->text(_tl('Nama', 15) . ": " . $request->DataPesanan['NamaCustomer']);
         $printer->feed();
-        $printer->text(_tl('Alamat', 15) . ": " . $request->Data['ALAMAT']);
+        $printer->text(_tl('Alamat', 15) . ": " . $request->DataPesanan['Alamat']);
         $printer->feed();
-        $printer->text(_tl('Telp ', 15) . ": " . $request->Data['NO. TELP']);
+        $printer->text(_tl('Telp ', 15) . ": " . $request->DataPesanan['NoHandphone']);
         $printer->feed();
-        $printer->text(_tl('Umur ', 15) . ": " . $request->Data['Umur']);
+        $printer->text(_tl('Umur ', 15) . ": " . $request->DataPesanan['Umur']);
         $printer->feed();
-        $printer->text(_tl('Jenis Kelamin ', 15) . ": " . $request->Data['JENIS KELAMIN']);
+        $printer->text(_tl('Jenis Kelamin ', 15) . ": " . $request->DataPesanan['JenisKelamin']);
         $printer->feed();
         $printer->text(_tl('', self::WIDTH, '='));
         $printer->feed();
@@ -121,13 +121,22 @@ class PrintController extends Controller
         $printer->text(_tl('', self::WIDTH, '-'));
         $printer->feed();
 
-        $printer->text(_tl('Jenis Frame', 15) . ': ' . _tl($request->Data['JENIS FRAME'], 5) . _tl('Wrap Angle', 15) . ': ' . _tl($request->Data['WRAP ANGLE'], 5));
+        $printer->text(_tl('Jenis Frame', 15) . ': ' . _tl($request->Data['JENIS FRAME'], 29));
         $printer->feed();
-        $printer->text(_tl('Koridor', 15) . ': ' . _tl($request->Data['CORRIDOR'], 5) . _tl('Pantoskopik', 15) . ': ' . _tl($request->Data['PANTOSCOPIK'], 5));
+        $printer->text(_tl('Koridor', 15) . ': ' . _tl($request->Data['CORRIDOR'], 29));
         $printer->feed();
-        $printer->text(_tl('Visus Balance', 15) . ': ' . _tl($request->Data['VISUS BALANCING'], 5) . _tl('Vertex Distance', 15) . ': ' . _tl($request->Data['VERTEX DISTANCE'], 5));
+        $printer->text(_tl('Visus Balance', 15) . ': ' . _tl($request->Data['VISUS BALANCING'], 29));
         $printer->feed();
-        $printer->text(_tl('Duke Elder', 15) . ': ' . _tl($request->Data['DUKE ELDER'], 5) . _tl('Catatan Resep', 15) . ': ' . _tl($request->Data['CATATAN RESEP'], 5));
+        $printer->text(_tl('Duke Elder', 15) . ': ' . _tl($request->Data['DUKE ELDER'], 29));
+        $printer->feed();
+        $printer->text(_tl('Wrap Angle', 15) . ': ' . _tl($request->Data['WRAP ANGLE'], 29));
+        $printer->feed();
+        $printer->text(_tl('Pantoskopik', 15) . ': ' . _tl($request->Data['PANTOSCOPIK'], 29));
+        $printer->feed();
+        $printer->text(_tl('Vertex Distance', 15) . ': ' . _tl($request->Data['VERTEX DISTANCE'], 29));
+        $printer->feed();
+        $printer->text(_tl('Catatan Resep', 15) . ': ' . _tl($request->Data['CATATAN RESEP'], 29));
+        $printer->feed();
         $printer->feed();
         
         $printer->text(_tl('', self::WIDTH, '-'));
@@ -165,25 +174,26 @@ class PrintController extends Controller
         $printer->feed();
         $printer->feed();
 
-        $printer->text( _tl('Frame', 10) . ': ' . _tl($request->Data['FRAME'], 36));
+        $printer->text( _tl('Frame', 10) . ': ' . _tl($request->DataPesanan['Frame'], 36));
         $printer->feed();
-        $printer->text( _tl('Lensa', 10) . ': ' . _tl($request->Data['LENSA'], 36));
+        $printer->text( _tl('Lensa', 10) . ': ' . _tl($request->DataPesanan['Lensa'], 36));
         $printer->feed();
 
-        $printer->text(_tl('Total', 10) . ': ' . _tl($request->Data['TOTAL'], 36));
+        $printer->text(_tl('Total', 10) . ': ' . _tl($request->DataPesanan['Total'], 36));
         $printer->feed();
-        $printer->text(_tl('Dibayar', 10) . ': ' . _tl($request->Data['UANGMUKA'], 36));
+        $printer->text(_tl('Dibayar', 10) . ': ' . _tl($request->DataPesanan['UangMuka'], 36));
         $printer->feed();
-        $printer->text(_tl('Sisa', 10) . ': ' . _tl($request->Data['SISA'], 36));
+        $printer->text(_tl('Sisa', 10) . ': ' . _tl($request->DataPesanan['Sisa'], 36));
         $printer->feed();
         $printer->text(_tl('', self::WIDTH, '-'));
         $printer->feed();
         $printer->feed();
 
         $printer->setDoubleStrike(true);
-        $printer->text(_tc($request->Data['STORE'], self::WIDTH));
+        $printer->setTextSize(2, 2);
+        $printer->text(_tc($Cabang,25));
+        $printer->setTextSize(1, 1);
         $printer->setDoubleStrike(false);
-        $printer->feed();
         $printer->feed();
     
         $printer->text(_tc('Edger', 24) . _tc('Quality Control', 24));
@@ -210,9 +220,6 @@ class PrintController extends Controller
         $printer->text(_tl('', self::WIDTH));
         $printer->feed();
         $printer->setDoubleStrike(false);
-        $printer->feed();
-        $printer->feed();
-        $printer->feed();
         $printer->feed();
         $printer->feed();
 
